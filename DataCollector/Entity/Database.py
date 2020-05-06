@@ -1,18 +1,26 @@
-from sqlalchemy import Table, MetaData, Column, Integer, create_engine, inspect
+from sqlalchemy import Table, MetaData, Column, BigInteger, create_engine, inspect, String, DateTime
 import urllib.parse
 from sqlalchemy.orm import Session
+import pyodbc
 
 connectionString = r'Driver={SQL Server};Server=.;Database=stock-test;Trusted_Connection=yes;'
 engine = create_engine('mssql+pyodbc:///?odbc_connect=' + urllib.parse.quote_plus(connectionString))
 
 metaData = MetaData()
 tradeTable = Table('trade', metaData,
-                   Column('id', Integer, primary_key=True),
-                   Column('Code', Integer),
-                   Column('Open', Integer),
-                   Column('Close', Integer),
-                   Column('High', Integer),
-                   Column('Low', Integer),
+                   Column('id', BigInteger, primary_key=True),
+                   Column('Code', BigInteger),
+                   Column('Date', DateTime),
+                   Column('Namad', String),
+                   Column('Count', BigInteger),
+                   Column('Volume', BigInteger),
+                   Column('Price', BigInteger),
+                   Column('Yesterday', BigInteger),
+                   Column('Open', BigInteger),
+                   Column('Last', BigInteger),
+                   Column('Close', BigInteger),
+                   Column('High', BigInteger),
+                   Column('Low', BigInteger),
                    )
 
 metaData.create_all(engine)
@@ -21,8 +29,12 @@ metaData.create_all(engine)
 #                {'id': 5, 'x': 48})
 
 dataSession = Session(engine)
-print(dataSession.query(tradeTable))
+# print(dataSession.query(tradeTable))
 
-u1 = dataSession.query(tradeTable).all()
+
+# u1 = dataSession.query(tradeTable).all()
 # u1 = s.query(t).filter(t.id==3).all()
-print(u1)
+# print(u1)
+
+def update(data):
+    engine.execute(tradeTable.insert(), data)
