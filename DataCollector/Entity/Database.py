@@ -2,6 +2,7 @@ from sqlalchemy import Table, MetaData, Column, BigInteger, create_engine, inspe
 import urllib.parse
 from sqlalchemy.orm import Session
 import pyodbc
+from sqlalchemy.sql import sqltypes
 
 connectionString = r'Driver={SQL Server};Server=.;Database=stock-test;Trusted_Connection=yes;'
 engine = create_engine('mssql+pyodbc:///?odbc_connect=' + urllib.parse.quote_plus(connectionString))
@@ -11,7 +12,7 @@ tradeTable = Table('trade', metaData,
                    Column('id', BigInteger, primary_key=True),
                    Column('Code', BigInteger),
                    Column('Date', DateTime),
-                   Column('Namad', String),
+                   Column('Namad', sqltypes.NVARCHAR),
                    Column('Count', BigInteger),
                    Column('Volume', BigInteger),
                    Column('Price', BigInteger),
